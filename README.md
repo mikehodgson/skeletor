@@ -1,2 +1,2 @@
 # skeletor
-## A single page app skeleton
+A single page app skeleton
