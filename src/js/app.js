@@ -1,4 +1,5 @@
 import style from '../css/app.less'
+import normalize from 'normalize.css'
 
 const _debug = true
 
