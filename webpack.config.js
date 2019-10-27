@@ -1,59 +1,40 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MinifyPlugin = require('babel-minify-webpack-plugin')
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+
 const path = require('path')
-const WebpackPwaManifest = require('webpack-pwa-manifest')
 
 module.exports = {
+  mode: 'production',
   entry: {
-    app: ['./src/js/app.js']
+    app: './src/app.ts'
   },
   output: {
     path: path.join(__dirname, '/dist/'),
-    filename: 'js/bundle.js'
+    filename: 'app.js'
+  },
+  module: {
+    rules: [{
+      test: /\.less$/i,
+      use: [
+        { loader: 'style-loader' },
+        { loader: 'css-loader' },
+        { loader: 'less-loader' }
+      ],
+    }, {
+      test: /\.tsx?$/,
+      use: 'ts-loader',
+      exclude: /node_modules/
+    }]
   },
   plugins: [
     new CopyWebpackPlugin([
       { from: 'static' }
     ]),
-    new WebpackPwaManifest({
-      inject: false,
-      fingerprints: false,
-      filename: 'manifest.webmanifest',
-      name: 'App Name',
-      short_name: 'App',
-      description: 'App Description',
-      background_color: '#3d9dae',
-      crossorigin: 'use-credentials'
-    })
+    new CleanWebpackPlugin({ verbose: true }),
+    new MinifyPlugin({ mangle: { topLevel: true } }),
+    new LodashModuleReplacementPlugin()
   ],
-  module: {
-    rules: [{
-      test: /\.css$/,
-      use: [
-        { loader: 'style-loader' },
-        { loader: 'css-loader', options: { importLoaders: 1 } },
-        { loader: 'postcss-loader' }
-      ]
-    }, {
-      test: /\.less$/,
-      use: [
-        { loader: 'style-loader' },
-        { loader: 'css-loader' },
-        { loader: 'less-loader' }
-      ]
-    }, {
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env']
-        }
-      }
-    }]
-  },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000
-  }
+  devtool: 'source-map'
 }
