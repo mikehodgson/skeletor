@@ -29,9 +29,11 @@ module.exports = {
     }]
   },
   plugins: [
-    new CopyWebpackPlugin([
-      { from: 'static' }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'static' }
+      ]
+    }),
     new CleanWebpackPlugin({ verbose: true }),
     new MinifyPlugin({ mangle: { topLevel: true } }),
     new LodashModuleReplacementPlugin()
