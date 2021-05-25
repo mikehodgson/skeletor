@@ -1,6 +1,5 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const MinifyPlugin = require('babel-minify-webpack-plugin')
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 
 const path = require('path')
@@ -35,7 +34,6 @@ module.exports = {
       ]
     }),
     new CleanWebpackPlugin({ verbose: true }),
-    new MinifyPlugin({ mangle: { topLevel: true } }),
     new LodashModuleReplacementPlugin()
   ],
   devtool: 'source-map'
